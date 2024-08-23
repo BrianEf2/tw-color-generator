@@ -4,8 +4,6 @@
 
     export let code = '';
     export let language;
-
-    $: console.log(code);
 </script>
 
 <svelte:head>

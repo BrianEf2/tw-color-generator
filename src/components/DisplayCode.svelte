@@ -5,31 +5,36 @@
     import atomOneDark from "svelte-highlight/styles/atom-one-dark";
     import JSON5 from 'json5';
 
-    $: tailwindConfig = {
-        theme: {
-            extend: {
-                colors: $colorStore.reduce((acc, color) => {
-                    if (color && color.name && color.tailwind) {
-                        acc[color.name] = color.tailwind;
-                    }
-                    return acc;
-                }, {})
-            }
-        }
-    };
+    let tailwindConfig = {};
+    let cssVariables = '';
 
-    $: cssVariables = `
+    colorStore.subscribe(colorStore => {
+        tailwindConfig = {
+            theme: {
+                extend: {
+                    colors: colorStore.reduce((acc, color) => {
+                        if (color && color.name && color.tailwind) {
+                            acc[color.name] = color.tailwind;
+                        }
+                        return acc;
+                    }, {})
+                }
+            }
+        };
+
+        cssVariables = `
 :root {
-${$colorStore.map(color => {
-        if (color && color.name && color.css) {
-            return Object.keys(color.css).map(shade => {
-                const rgb = color.css[shade];
-                return `${rgb};`;
-            }).join('\n');
-        }
-        return '';
-    }).join('\n')}
+${colorStore.map(color => {
+            if (color && color.name && color.css) {
+                return Object.keys(color.css).map(shade => {
+                    const rgb = color.css[shade];
+                    return `${rgb};`;
+                }).join('\n');
+            }
+            return '';
+        }).join('\n')}
 }`;
+    });
 </script>
 
 <svelte:head>
@@ -37,8 +42,8 @@ ${$colorStore.map(color => {
 </svelte:head>
 
 <main>
-    <h2>Generated Tailwind Config</h2>
-    <Code language="json" code={JSON5.stringify(tailwindConfig, null, 2).replace(/'(\d+)':/g, '$1:')} />
-    <h2>Generated CSS Variables</h2>
-    <Code language="css" code={cssVariables} />
+    <div class="text-xl font-bold mt-8 mb-2 text-slate-100">Generated Tailwind Config</div>
+    <Code language="json" code={JSON5.stringify(tailwindConfig, null, 2).replace(/'(\d+)':/g, '$1:')}/>
+    <div class="text-xl font-bold mt-8 mb-2 text-slate-100">Generated CSS Variables</div>
+    <Code language="css" code={cssVariables}/>
 </main>
