@@ -1,67 +1,66 @@
 <script>
+    import { colorStore } from '@stores/colorStore.js';
+
     let colorName = '';
     let colorHex = '';
-    let colors = [];
 
-    function add() {
-        colors = colors.concat(
-            {
-                name: colorName,
-                hex: colorHex
-            }
-        )
+    const addColor = () => {
+        if (colorName.trim() && colorHex.trim()) {
+            colorStore.addColor(colorName, colorHex);
+            colorName = '';
+            colorHex = '';
+        }
+    };
 
-        clear();
-    }
+    const deleteColor = (id) => {
+        colorStore.removeColor(id);
+    };
 
-    function clear() {
-        colorName = '';
-        colorHex = '';
-    }
-
-    $:console.log(colors)
-
+    const clearAllColors = () => {
+        colorStore.reset();
+    };
 </script>
 
 <div class="flex flex-col space-y-2">
-    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
-        <label class="flex select-none items-center pl-3 text-gray-500 sm:text-sm w-1/4" for="primary-color">Color name:</label>
+    <div class="flex rounded-md bg-slate-50 shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
+        <label class="flex w-1/4 select-none items-center pl-3 text-gray-500 sm:text-sm" for="primary-color">Color name:</label>
         <input type="text" bind:value={colorName}
-               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+               class="block flex-1 border-0 bg-transparent pl-1 placeholder:text-gray-400 text-gray-900 py-1.5 focus:ring-0 sm:text-sm sm:leading-6"
                placeholder="e.g. primary">
     </div>
     <div>
-        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
-            <label class="flex select-none items-center pl-3 text-gray-500 sm:text-sm w-1/4" for="primary-color">Add HEX:</label>
+        <div class="flex rounded-md bg-slate-50 shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
+            <label class="flex w-1/4 select-none items-center pl-3 text-gray-500 sm:text-sm" for="primary-color">Add HEX:</label>
             <input type="text" bind:value={colorHex}
-                   class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                   class="block flex-1 border-0 bg-transparent pl-1 placeholder:text-gray-400 text-gray-900 py-1.5 focus:ring-0 sm:text-sm sm:leading-6"
                    placeholder="e.g. 000000">
         </div>
         <span class="text-xs text-gray-400 -mt-1.5">Without #</span>
     </div>
 
-    <button on:click={add} class="text-sm text-gray-600 bg-transparent hover:bg-green-500 hover:text-white py-3 border-b-2 border-green-500 transition-all duration-200 ease-in-out font-bold uppercase">
+    <button on:click={addColor}
+            class="border-b-2 border-green-500 bg-glass py-3 text-sm font-bold uppercase text-slate-50 transition-all duration-200 ease-in-out hover:bg-green-500 hover:text-white">
         Add new
     </button>
 </div>
 
-{#if colors.length > 0}
+{#if $colorStore.length > 0}
     <div>
-        <h2 class="text-lg font-bold mb-2">Added colors:</h2>
+        <h2 class="mb-2 text-lg font-bold text-slate-50">Added colors:</h2>
         <div class="flex flex-col space-y-6">
-            {#each colors as color, i}
+            {#each $colorStore as color, index}
                 <div class="flex flex-col space-y-4">
-                    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
-                        <label class="flex select-none items-center pl-3 text-gray-500 sm:text-sm w-1/4" for="primary-color">Color name:</label>
-                        <input type="text" bind:value={colors[i].name}
-                               class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    <div class="flex rounded-md bg-slate-50 shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
+                    <label class="flex w-1/4 select-none items-center pl-3 text-gray-500 sm:text-sm" for="primary-color">Color name:</label>
+                        <input type="text" bind:value={color.name}
+                               class="block flex-1 border-0 bg-transparent pl-1 placeholder:text-gray-400 text-gray-900 py-1.5 focus:ring-0 sm:text-sm sm:leading-6"
                                placeholder="e.g. primary">
                     </div>
                     <div>
-                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
-                            <label class="flex select-none items-center pl-3 text-gray-500 sm:text-sm w-1/4" for="primary-color">Add HEX:</label>
-                            <input type="text" bind:value={colors[i].hex}
-                                   class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                        <div class="flex rounded-md bg-slate-50 shadow-sm ring-1 ring-inset ring-gray-300 sm:max-w-md">
+                        <label class="flex w-1/4 select-none items-center pl-3 text-gray-500 sm:text-sm" for="primary-color">Add HEX:</label>
+                            <input type="text" bind:value={color.hex}
+                                   class="block flex-1 border-0 bg-transparent pl-1 placeholder:text-gray-400 text-gray-900 py-1.5 focus:ring-0 sm:text-sm sm:leading-6"
                                    placeholder="e.g. 000000">
                         </div>
                         <span class="text-xs text-gray-400 -mt-1.5">Without #</span>

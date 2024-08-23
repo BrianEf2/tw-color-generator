@@ -10,12 +10,18 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.1",
+    "@astrojs/check": "^0.9.2",
     "@astrojs/svelte": "^5.7.0",
     "@astrojs/tailwind": "^5.1.0",
-    "astro": "^4.13.1",
+    "astro": "^4.14.2",
+    "highlight.js": "^11.10.0",
+    "json5": "^2.2.3",
     "svelte": "^4.2.18",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "svelte-highlight": "^7.7.0",
+    "theme-colors": "^0.1.0"
   }
 }

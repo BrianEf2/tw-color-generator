@@ -14,7 +14,10 @@
       ],
       "@assets/*": [
         "src/assets/*"
-      ]
+      ],
+      "@stores/*": [
+        "src/lib/stores/*"
+      ],
     }
   }
 }
