@@ -41,6 +41,7 @@ function createColorStore() {
         removeColor: (id) => update(colors => colors.filter(color => color.id !== id)),
         updateColor: (id, newColorData) => update(colors => {
             return colors.map(color => {
+                console.log(color)
                 if (color.id === id) {
                     return {
                         ...color,
